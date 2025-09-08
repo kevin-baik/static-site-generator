@@ -12,7 +12,7 @@ class TestHTMLNode(unittest.TestCase):
         )
         self.assertEqual(
             node.props_to_html(),
-            'class="greeting" href="https://boot.dev"',
+            ' class="greeting" href="https://boot.dev"',
         )
 
     def test_values(self):
