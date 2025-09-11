@@ -46,13 +46,7 @@ class TestHTMLNode(unittest.TestCase):
         )
         self.assertEqual(
             node.__repr__(),
-            f"""
-            ==HTML Node==
-            tag: p
-            value: What a strange world
-            children: None
-            props: {{'class': 'primary'}}
-            """
+            f"HTMLNode(tag: p, value: What a strange world, children: None, props: {{'class': 'primary'}})"
         )
 
 

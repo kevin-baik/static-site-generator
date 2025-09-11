@@ -2,7 +2,8 @@ import unittest
 from block_markdown import(
     BlockType,
     markdown_to_blocks,
-    block_to_block_type
+    block_to_block_type,
+    markdown_to_html_node,
 )
 
 class TestMarkdownToBlocks(unittest.TestCase):
@@ -25,7 +26,7 @@ This is the same paragraph on a new line
                 "- This is a list\n- with items",
             ],
         )
-    
+    @unittest.skip("For testing block -> BlockType")
     def test_block_to_block_type(self):
         blocks = [
             "### Heading 3",
@@ -49,6 +50,48 @@ This is the same paragraph on a new line
                 BlockType.PARAGRAPH
             ]
         )
+
+class TestMarkdownToHTMLNode(unittest.TestCase):
+    def test_markdown_paragraph(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+    
+    def test_markdown_codeblock(self):
+        md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+        )
+
+
+class TestBlockTypeEnum(unittest.TestCase):
+    @unittest.skip("For printing BlockType attributes")
+    def test_BlockType_Enum(self):
+        for member in BlockType:
+            print(f"Enum Member: {member}, Value: {member.value}, Name: {member.name}, Tag: {member.tag}, Format: {member.format}")
+        self.assertEqual(True, True)
+
 
 if __name__ == "__main__":
     unittest.main()

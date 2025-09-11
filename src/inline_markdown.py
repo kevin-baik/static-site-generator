@@ -1,7 +1,8 @@
 import re
 from textnode import TextType, TextNode
 
-
+# input: text | <string>
+# output: List<TextNode>
 def text_to_textnodes(text):
     textnodes = [TextNode(text, TextType.TEXT)]
     textnodes = split_nodes_delimiter(textnodes, "**", TextType.BOLD)
@@ -11,7 +12,8 @@ def text_to_textnodes(text):
     textnodes = split_nodes_link(textnodes)
     return textnodes
 
-
+# input: List<TextNode>, <string>, <TextType>
+# output: List<TextNode>
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
     for node in old_nodes:
@@ -25,7 +27,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         new_nodes.extend(text_delimiter(node.text, delimiter, text_type))
     return new_nodes
 
-
+# input: <string>, <string>, <TextType>
+# output: List<TextNode>
 def text_delimiter(text, delimiter, text_type):
     new_nodes = []
     if text.count(delimiter) == 0:
@@ -48,7 +51,8 @@ def text_delimiter(text, delimiter, text_type):
     
     return new_nodes
 
-
+# input: List<TextNode>
+# output: List<TextNode>
 def split_nodes_image(old_nodes):
     new_nodes = []
     for node in old_nodes:
@@ -75,7 +79,8 @@ def split_nodes_image(old_nodes):
         
     return new_nodes
 
-
+# input: List<TextNode>
+# output: List<TextNode>
 def split_nodes_link(old_nodes):
     new_nodes = []
     for node in old_nodes:
@@ -102,13 +107,16 @@ def split_nodes_link(old_nodes):
 
     return new_nodes
 
-
+# input: <string>
+# output: List<string>
 def extract_markdown_images(text):
     pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
     return matches
 
 
+# input: <string>
+# output: List<string>
 def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
