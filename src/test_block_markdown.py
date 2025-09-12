@@ -1,6 +1,7 @@
 import unittest
 from block_markdown import(
     BlockType,
+    extract_title,
     markdown_to_blocks,
     block_to_block_type,
     markdown_to_html_node,
@@ -157,6 +158,15 @@ class TestBlockTypeEnum(unittest.TestCase):
             print(f"Enum Member: {member}, Value: {member.value}, Name: {member.name}, Tag: {member.tag}, Format: {member.format}")
         self.assertEqual(True, True)
 
+
+class TestExtractTitle(unittest.TestCase):
+    def test_extract_title(self):
+        md = "#  Title 1 "
+        title = extract_title(md)
+        self.assertEqual(
+                title,
+                "Title 1",
+        )
 
 if __name__ == "__main__":
     unittest.main()
