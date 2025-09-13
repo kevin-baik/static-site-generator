@@ -2,6 +2,7 @@ import os
 import shutil
 import re
 
+from pathlib import Path
 from htmlnode import HTMLNode
 from block_markdown import markdown_to_html_node
 
@@ -83,10 +84,32 @@ def copy_contents_to_public(src, dest):
             print(f"copying... {content} -> {new_dest_path}")
             shutil.copy(content_path, new_dest_path)
 
+def make_content_dirs(src, dest):
+    content_dirs = os.listdir(src)
+    print(content_dirs)
+    for content in content_dirs:
+        print(f"Is directory? {os.path.isdir(os.path.join(src, content))}")
+        if os.path.isdir(os.path.join(src, content)):
+            os.mkdir(os.path.join(dest, content))
+            make_content_dirs(os.path.join(src, content), os.path.join(dest, content))
+            
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    contents = os.listdir(dir_path_content)
+    for content in contents:
+        content_path = os.path.join(dir_path_content, content)
+        dest_path = os.path.join(dest_dir_path, content)
+        if os.path.isdir(content_path):
+            os.mkdir(os.path.join(dest_dir_path, content))
+            generate_pages_recursive(content_path, template_path, dest_path)
+        if os.path.isfile(content_path) and content_path.endswith(".md"):
+            dest_path = dest_path.replace(".md", ".html")
+            generate_page(content_path, 'template.html', dest_path)
+
 def main():
     print(f"=====Executing__MAIN__=====")
     copy_contents_to_public('static', 'public')
-    generate_page('content/index.md', 'template.html', 'public/index.html')
-
+    generate_pages_recursive('content', 'template.html', 'public')
+    
+            
 if __name__ == "__main__":
     main()
